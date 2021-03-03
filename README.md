@@ -1,16 +1,16 @@
 # Lowe’s Vendor Tools
 
-A collection of various client side tools that helps the world interact with Lowes Ecosystem.
+A collection of various client side tools that helps the world interact with Lowe's Ecosystem.
 
 ## ASNHub
 
-Interact with Lowes ASN Api's using the client side examples.
+Interact with Lowe's ASN API's using the client side examples.
 
 ### Who is this useful for
 
-- Vendor partners willing to integrate with Lowes via API's & post the shipment (ASN) to Lowe’s 
-- Vendor partners can view the current status of Shipment
-- Vendor partners can get the ASN accept/reject/warning messages through callback and act upon appropriately by rectifying the payload 
+- Vendor partners willing to integrate with Lowe's via API's & post the shipment (ASN) to Lowe’s 
+- Vendor partners wanting to view the current status of Shipment
+- Vendor partners wanting to get the ASN accept/reject/warning messages through callback and act upon appropriately by rectifying the payload 
 
 ## Contributing
 
