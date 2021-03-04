@@ -24,4 +24,4 @@ Please also see our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## License
 
-GoAlert is licensed under the [Apache License, Version 2.0](./LICENSE.md).
+VendorTools is licensed under the [Apache License, Version 2.0](./LICENSE.md).
