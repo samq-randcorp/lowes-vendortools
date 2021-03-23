@@ -12,8 +12,11 @@
 
 package io.swagger.client.api;
 
-import io.swagger.client.ApiException;
 import org.junit.Test;
+
+import com.lowes.vendortools.ApiException;
+import com.lowes.vendortools.api.AsnUtilityControllerApi;
+
 import org.junit.Ignore;
 
 import java.util.ArrayList;
