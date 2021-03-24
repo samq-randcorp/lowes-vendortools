@@ -12,10 +12,13 @@
 
 package io.swagger.client.api;
 
-import io.swagger.client.ApiException;
-import io.swagger.client.model.ASNInformation;
-import io.swagger.client.model.ValidatedASNView;
 import org.junit.Test;
+
+import com.lowes.vendortools.ApiException;
+import com.lowes.vendortools.api.AsnUtilityApi;
+import com.lowes.vendortools.model.ASNInformation;
+import com.lowes.vendortools.model.ValidatedASNView;
+
 import org.junit.Ignore;
 
 import java.util.ArrayList;
