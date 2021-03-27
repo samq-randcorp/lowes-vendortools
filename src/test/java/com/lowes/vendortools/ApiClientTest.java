@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,10 +33,10 @@ public class ApiClientTest {
 	ApiClient apiClient=null;
 	static String oauthToken=UUID.randomUUID().toString();
 	static ApiClientTest test =null;
-
+	static ClientAndServer clientAndServer=null; 
 	@BeforeAll
 	public static void createExpectationForInvalidAuth() throws InterruptedException {
-		ClientAndServer clientAndServer= startClientAndServer(PORTNUMBER);
+		 clientAndServer= startClientAndServer(PORTNUMBER);
 		clientAndServer.when(request("/oauth2/token").withMethod("POST"), exactly(10))
 				.respond(response().withStatusCode(200)
 						.withHeaders(new Header("Content-Type", "application/x-www-form-urlencoded"),
@@ -57,6 +58,7 @@ public class ApiClientTest {
 			bw.write('\n');
 			bw.write(apiClient.TOKEN_URL + "=" + "http://127.0.0.1:"+PORTNUMBER+"/oauth2/token");
 			bw.write('\n');
+			bw.write(apiClient.GRANT_TYPE+"="+"client_credentials");
 			bw.flush();
 			if (bw != null)
 				bw.close();
@@ -68,5 +70,9 @@ public class ApiClientTest {
 		Map<String, Authentication> authMap = apiClient.getAuthentications();
 		OAuth oauth = (OAuth) authMap.get("Oauth");
 		Assertions.assertEquals(this.oauthToken, oauth.getAccessToken());
+	}
+	@AfterAll
+	public static void cleanup() {
+		clientAndServer.stop();
 	}
 }
