@@ -1,0 +1,144 @@
+{
+    "ASN": {
+        "loadId": "1336881349",
+        "shipperNodeNumber": 17171,
+        "shipperNodeName": null,
+        "shipperNodeType": "Location",
+        "primaryEquipmentType": null,
+        "primaryEquipmentId": null,
+        "primaryEquipmentCarrierSCAC": null,
+        "estimatedToActualShipTimestamp": "2021-03-30T00:00:00",
+        "loadStatus": null,
+        "freightMovement": null,
+        "delivery": [
+            {
+                "deliveryId": "157980956",
+                "asnNumber": 7477,
+                "destinationNodeNumber": "543",
+                "estimatedToActualDeliveryTimestamp": "1950-01-01T00:00:00",
+                "order": [
+                    {
+                        "ordNbr": "157980956",
+                        "ordSource": "PO Direct",
+                        "orderType": "SOS",
+                        "xDockNodeNumber": 0,
+                        "finalDestinationNodeNumber": 0,
+                        "orderReferences": [
+                            {
+                                "orderReferenceType": "RR",
+                                "orderReferenceId": "1"
+                            }
+                        ],
+                        "ordWgt": 0.0,
+                        "ordCube": 0.0,
+                        "ordDetail": [
+                            {
+                                "lineNbr": 0,
+                                "dtlId": "1642857",
+                                "dtlRefs": [
+                                    {
+                                        "dtlRefType": "ItmDesc",
+                                        "dtlRefId": "GE 15.6 CUFT TM HPS16BTNRBB             "
+                                    },
+                                    {
+                                        "dtlRefType": "UOM",
+                                        "dtlRefId": "EA"
+                                    }
+                                ],
+                                "dtlType": "ItmNbr",
+                                "dtlStatusQty": [
+                                    {
+                                        "dtlStatus": "Loaded",
+                                        "qty": 1,
+                                        "absQtyIdc": true
+                                    }
+                                ],
+                                "hrcId": "000000000003",
+                                "barcodeId": "084691846956   ",
+                                "prtHrcId": "000000000002"
+                            },
+                            {
+                                "lineNbr": 0,
+                                "dtlId": "0",
+                                "dtlRefs": [
+                                    {
+                                        "dtlRefType": "ItmDesc",
+                                        "dtlRefId": ""
+                                    },
+                                    {
+                                        "dtlRefType": "UOM",
+                                        "dtlRefId": "EA"
+                                    }
+                                ],
+                                "dtlType": "ItmNbr",
+                                "dtlStatusQty": [
+                                    {
+                                        "dtlStatus": "Loaded",
+                                        "qty": 3,
+                                        "absQtyIdc": true
+                                    }
+                                ],
+                                "hrcId": "000000000004",
+                                "barcodeId": "084691808404   ",
+                                "prtHrcId": "000000000002"
+                            },
+                            {
+                                "lineNbr": 0,
+                                "dtlId": "1221841",
+                                "dtlRefs": [
+                                    {
+                                        "dtlRefType": "ItmDesc",
+                                        "dtlRefId": "GE FS ELEC RNG JBS360DMBB               "
+                                    },
+                                    {
+                                        "dtlRefType": "UOM",
+                                        "dtlRefId": "EA"
+                                    }
+                                ],
+                                "dtlType": "ItmNbr",
+                                "dtlStatusQty": [
+                                    {
+                                        "dtlStatus": "Loaded",
+                                        "qty": 2,
+                                        "absQtyIdc": true
+                                    }
+                                ],
+                                "hrcId": "000000000005",
+                                "barcodeId": "084691829140   ",
+                                "prtHrcId": "000000000002"
+                            }
+                        ],
+                        "poDestinationNodeNumber": 0,
+                        "asnCreateTimestamp": "2021-03-26T01:45:00",
+                        "asnUpdateTimestamp": "2021-03-26T04:00:19",
+                        "hrcId": "000000000002"
+                    }
+                ],
+                "shipmentHandlingUnit": []
+            }
+        ],
+        "retryCounter": 0,
+        "revisionNumber": 0,
+        "requiredShipTimestamp": null
+    },
+    "IncomingHeader": {
+        "tnsPpsId": "00",
+        "asnHrcSruId": "0004",
+        "dstMthTxt": "        ",
+        "orgTmZonTxt": "  ",
+        "arvTmZonTxt": "  ",
+        "shpMthPayId": "PP",
+        "equipmentDescTxt": "  ",
+        "equipmentId": "          ",
+        "frgCaiTxt": "80956            ",
+        "cdkLocNbr": "0",
+        "packagingInfo": [],
+        "troMthId": "M    ",
+        "stxErrCdTxt": null,
+        "evpErrCdTxt": null,
+        "gsCmcId": "009708603      ",
+        "cmcQlfTxt": "01",
+        "pnrTesPdcIdc": "P",
+        "fileName": "ASN_SERVICE__REGRESSION_TEST_FILE.TXT"
+    }
+}

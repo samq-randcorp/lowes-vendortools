@@ -1,6 +1,6 @@
 package com.lowes.vendortools.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ASNServiceResponseDTO {
 String response;
-@JsonProperty(value = "transaction-Id")
+@SerializedName(value = "transaction-Id")
 private String transactionId;
 private String time;
 }

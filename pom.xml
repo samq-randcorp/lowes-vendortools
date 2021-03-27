@@ -169,6 +169,31 @@
   </profiles>
 
   <dependencies>
+  <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-all</artifactId>
+    <version>1.10.19</version>
+    <scope>test</scope>
+</dependency>
+  
+  <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+<dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+    <version>4.5.13</version>
+</dependency>
+<!-- Mock Server -->
+  <dependency>
+    <groupId>org.mock-server</groupId>
+    <artifactId>mockserver-netty</artifactId>
+    <version>3.10.8</version>
+</dependency>
+<dependency>
+    <groupId>org.mock-server</groupId>
+    <artifactId>mockserver-client-java</artifactId>
+    <version>3.10.8</version>
+</dependency>
   <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 <dependency>
     <groupId>org.springframework</groupId>
@@ -234,12 +259,14 @@
       <version>${threetenbp-version}</version>
     </dependency>
     <!-- test dependencies -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit-version}</version>
-      <scope>test</scope>
-    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>${junit-version}</version>
+    <scope>test</scope>
+</dependency>
+
   </dependencies>
   <properties>
     <java.version>1.7</java.version>
@@ -251,7 +278,7 @@
     <gson-fire-version>1.8.3</gson-fire-version>
     <threetenbp-version>1.3.5</threetenbp-version>
     <maven-plugin-version>1.0.0</maven-plugin-version>
-    <junit-version>4.13.1</junit-version>
+    <junit-version>5.7.1</junit-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

@@ -33,7 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AsnMasterApi {
-    private ApiClient apiClient;
+    private static final String AUTH_TYPE = "Oauth";
+	private ApiClient apiClient;
 
     public AsnMasterApi() {
         this(Configuration.getDefaultApiClient());
@@ -97,7 +98,7 @@ public class AsnMasterApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BasicAuth" };
+        String[] localVarAuthNames = new String[] { AUTH_TYPE };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -222,7 +223,7 @@ public class AsnMasterApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BasicAuth" };
+        String[] localVarAuthNames = new String[] { AUTH_TYPE };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -233,8 +234,7 @@ public class AsnMasterApi {
             throw new ApiException("Missing the required parameter 'body' when calling postAsn(Async)");
         }
         
-        com.squareup.okhttp.Call call = postAsnCall(body, progressListener, progressRequestListener);
-        return call;
+       return postAsnCall(body, progressListener, progressRequestListener);
 
         
         

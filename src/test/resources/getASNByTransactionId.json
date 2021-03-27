@@ -1,0 +1,15 @@
+{
+    "id": "605eb1dbfd3bf74717256634",
+    "ordType": "Stock",
+    "numberOfValidationFailed": 0,
+    "sentToKafkaTopic": false,
+    "environment": "stage",
+    "asnCreateTimestamp": "2021-03-26T21:15:00",
+    "asnUpdateTimestamp": "2021-03-26T21:15:00",
+    "vendorNumber": 45008,
+    "eventCreatedAt": "2021-03-27T00:17:31.410",
+    "revisionNumber": 1,
+    "orlShipId": "000000000000000000000168366204-5064098",
+    "orderNumber": "168366204",
+    "validationError": []
+}
