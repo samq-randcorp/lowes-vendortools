@@ -144,6 +144,7 @@ public class ASNMasterAPITest {
 		ASNInformation asnInformation = new ObjectMapper().readValue(new File(testFile + "testJSON.json"),
 				ASNInformation.class);
 		ApiResponse<ASNServiceResponseDTO> response = asnMasterApi.postAsnWithHttpInfo(asnInformation);
+
 		Assertions.assertEquals("SUCCESS", response.getData().getResponse());
 		Assertions.assertEquals(trnxId, response.getData().getTransactionId());
 	}

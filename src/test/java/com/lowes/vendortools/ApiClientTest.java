@@ -55,6 +55,8 @@ public class ApiClientTest {
 			bw.write(apiClient.TOKEN_URL + "=" + "http://127.0.0.1:"+PORTNUMBER+"/oauth2/token");
 			bw.write('\n');
 			bw.write(apiClient.GRANT_TYPE+"="+"client_credentials");
+			bw.write('\n');
+			bw.write("base_path="+"http://127.0.0.1"+PORTNUMBER);
 			bw.flush();
 			if (bw != null)
 				bw.close();
@@ -66,7 +68,9 @@ public class ApiClientTest {
 		Assertions.assertEquals(apiClient, apiClient.setVerifyingSsl(true));
 		Map<String, Authentication> authMap = apiClient.getAuthentications();
 		OAuth oauth = (OAuth) authMap.get("Oauth");
+		Assertions.assertEquals("http://127.0.0.1"+PORTNUMBER,apiClient.getBasePath());
 		Assertions.assertEquals(this.oauthToken, oauth.getAccessToken());
+		
 	}
 	
 	@AfterAll

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
@@ -44,8 +43,6 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.HostnameVerifier;
@@ -83,9 +80,7 @@ import com.lowes.vendortools.auth.OAuth;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -95,8 +90,6 @@ import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor.Level;
 
 import lombok.extern.slf4j.Slf4j;
-import okio.BufferedSink;
-import okio.Okio;
 @Slf4j
 public class ApiClient {
 
@@ -159,10 +152,6 @@ public class ApiClient {
 		authentications = Collections.unmodifiableMap(authentications);
 	}
 
-	public static void main(String[] args) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, ParseException, IOException {
-		ApiClient api = new ApiClient();
-		api.generateOauthToken();
-	}
 	private String generateOauthToken()
 			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, ParseException, IOException {
 		// GET Client ID , Secret , tokenurl from Root property file
@@ -574,57 +563,7 @@ public class ApiClient {
 		return params;
 	}
 
-	/**
-	 * Formats the specified collection query parameters to a list of {@code Pair}
-	 * objects.
-	 *
-	 * Note that the values of each of the returned Pair objects are
-	 * percent-encoded.
-	 *
-	 * @param collectionFormat The collection format of the parameter.
-	 * @param name             The name of the parameter.
-	 * @param value            The value of the parameter.
-	 * @return A list of {@code Pair} objects.
-	 */
-	public List<Pair> parameterToPairs(String collectionFormat, String name, Collection value) {
-		List<Pair> params = new ArrayList<Pair>();
-
-		// preconditions
-		if (name == null || name.isEmpty() || value == null || value.isEmpty()) {
-			return params;
-		}
-
-		// create the params based on the collection format
-		if ("multi".equals(collectionFormat)) {
-			for (Object item : value) {
-				params.add(new Pair(name, escapeString(parameterToString(item))));
-			}
-			return params;
-		}
-
-		// collectionFormat is assumed to be "csv" by default
-		String delimiter = ",";
-
-		// escape all delimiters except commas, which are URI reserved
-		// characters
-		if ("ssv".equals(collectionFormat)) {
-			delimiter = escapeString(" ");
-		} else if ("tsv".equals(collectionFormat)) {
-			delimiter = escapeString("\t");
-		} else if ("pipes".equals(collectionFormat)) {
-			delimiter = escapeString("|");
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (Object item : value) {
-			sb.append(delimiter);
-			sb.append(escapeString(parameterToString(item)));
-		}
-
-		params.add(new Pair(name, sb.substring(delimiter.length())));
-
-		return params;
-	}
+	
 
 	/**
 	 * Sanitize filename by removing path. e.g. ../../sun.gif becomes sun.gif
@@ -728,9 +667,6 @@ public class ApiClient {
 			} catch (IOException e) {
 				throw new ApiException(e);
 			}
-		} else if (returnType.equals(File.class)) {
-			// Handle file downloading.
-			return (T) downloadFileFromResponse(response);
 		}
 
 		String respBody;
@@ -792,68 +728,7 @@ public class ApiClient {
 		}
 	}
 
-	/**
-	 * Download file from the given response.
-	 *
-	 * @param response An instance of the Response object
-	 * @throws ApiException If fail to read file content from response and write to
-	 *                      disk
-	 * @return Downloaded file
-	 */
-	public File downloadFileFromResponse(Response response) throws ApiException {
-		try {
-			File file = prepareDownloadFile(response);
-			BufferedSink sink = Okio.buffer(Okio.sink(file));
-			sink.writeAll(response.body().source());
-			sink.close();
-			return file;
-		} catch (IOException e) {
-			throw new ApiException(e);
-		}
-	}
 
-	/**
-	 * Prepare file for download
-	 *
-	 * @param response An instance of the Response object
-	 * @throws IOException If fail to prepare file for download
-	 * @return Prepared file for the download
-	 */
-	public File prepareDownloadFile(Response response) throws IOException {
-		String filename = null;
-		String contentDisposition = response.header("Content-Disposition");
-		if (contentDisposition != null && !"".equals(contentDisposition)) {
-			// Get filename from the Content-Disposition header.
-			Pattern pattern = Pattern.compile("filename=['\"]?([^'\"\\s]+)['\"]?");
-			Matcher matcher = pattern.matcher(contentDisposition);
-			if (matcher.find()) {
-				filename = sanitizeFilename(matcher.group(1));
-			}
-		}
-
-		String prefix = null;
-		String suffix = null;
-		if (filename == null) {
-			prefix = "download-";
-			suffix = "";
-		} else {
-			int pos = filename.lastIndexOf(".");
-			if (pos == -1) {
-				prefix = filename + "-";
-			} else {
-				prefix = filename.substring(0, pos) + "-";
-				suffix = filename.substring(pos);
-			}
-			// File.createTempFile requires the prefix to be at least three characters long
-			if (prefix.length() < 3)
-				prefix = "download-";
-		}
-
-		if (tempFolderPath == null)
-			return File.createTempFile(prefix, suffix);
-		else
-			return File.createTempFile(prefix, suffix, new File(tempFolderPath));
-	}
 
 	/**
 	 * {@link #execute(Call, Type)}
@@ -1032,9 +907,7 @@ public class ApiClient {
 			reqBody = null;
 		} else if ("application/x-www-form-urlencoded".equals(contentType)) {
 			reqBody = buildRequestBodyFormEncoding(formParams);
-		} else if ("multipart/form-data".equals(contentType)) {
-			reqBody = buildRequestBodyMultipart(formParams);
-		} else if (body == null) {
+		}else if (body == null) {
 			if ("DELETE".equals(method)) {
 				// allow calling DELETE without sending a request body
 				reqBody = null;
@@ -1155,45 +1028,7 @@ public class ApiClient {
 		return formBuilder.build();
 	}
 
-	/**
-	 * Build a multipart (file uploading) request body with the given form
-	 * parameters, which could contain text fields and file fields.
-	 *
-	 * @param formParams Form parameters in the form of Map
-	 * @return RequestBody
-	 */
-	public RequestBody buildRequestBodyMultipart(Map<String, Object> formParams) {
-		MultipartBuilder mpBuilder = new MultipartBuilder().type(MultipartBuilder.FORM);
-		for (Entry<String, Object> param : formParams.entrySet()) {
-			if (param.getValue() instanceof File) {
-				File file = (File) param.getValue();
-				Headers partHeaders = Headers.of("Content-Disposition",
-						"form-data; name=\"" + param.getKey() + "\"; filename=\"" + file.getName() + "\"");
-				MediaType mediaType = MediaType.parse(guessContentTypeFromFile(file));
-				mpBuilder.addPart(partHeaders, RequestBody.create(mediaType, file));
-			} else {
-				Headers partHeaders = Headers.of("Content-Disposition", "form-data; name=\"" + param.getKey() + "\"");
-				mpBuilder.addPart(partHeaders, RequestBody.create(null, parameterToString(param.getValue())));
-			}
-		}
-		return mpBuilder.build();
-	}
 
-	/**
-	 * Guess Content-Type header from the given file (defaults to
-	 * "application/octet-stream").
-	 *
-	 * @param file The given file
-	 * @return The guessed Content-Type
-	 */
-	public String guessContentTypeFromFile(File file) {
-		String contentType = URLConnection.guessContentTypeFromName(file.getName());
-		if (contentType == null) {
-			return "application/octet-stream";
-		} else {
-			return contentType;
-		}
-	}
 
 	/**
 	 * Apply SSL related settings to httpClient according to the current values of
