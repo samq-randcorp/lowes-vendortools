@@ -33,6 +33,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -45,6 +46,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
@@ -76,9 +78,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lowes.vendortools.auth.ApiKeyAuth;
 import com.lowes.vendortools.auth.Authentication;
-import com.lowes.vendortools.auth.HttpBasicAuth;
 import com.lowes.vendortools.auth.OAuth;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -369,67 +369,7 @@ public class ApiClient {
 	 */
 	public Authentication getAuthentication(String authName) {
 		return authentications.get(authName);
-	}
-
-	/**
-	 * Helper method to set username for the first HTTP basic authentication.
-	 *
-	 * @param username Username
-	 */
-	public void setUsername(String username) {
-		for (Authentication auth : authentications.values()) {
-			if (auth instanceof HttpBasicAuth) {
-				((HttpBasicAuth) auth).setUsername(username);
-				return;
-			}
-		}
-		throw new RuntimeException("No HTTP basic authentication configured!");
-	}
-
-	/**
-	 * Helper method to set password for the first HTTP basic authentication.
-	 *
-	 * @param password Password
-	 */
-	public void setPassword(String password) {
-		for (Authentication auth : authentications.values()) {
-			if (auth instanceof HttpBasicAuth) {
-				((HttpBasicAuth) auth).setPassword(password);
-				return;
-			}
-		}
-		throw new RuntimeException("No HTTP basic authentication configured!");
-	}
-
-	/**
-	 * Helper method to set API key value for the first API key authentication.
-	 *
-	 * @param apiKey API key
-	 */
-	public void setApiKey(String apiKey) {
-		for (Authentication auth : authentications.values()) {
-			if (auth instanceof ApiKeyAuth) {
-				((ApiKeyAuth) auth).setApiKey(apiKey);
-				return;
-			}
-		}
-		throw new RuntimeException("No API key authentication configured!");
-	}
-
-	/**
-	 * Helper method to set API key prefix for the first API key authentication.
-	 *
-	 * @param apiKeyPrefix API key prefix
-	 */
-	public void setApiKeyPrefix(String apiKeyPrefix) {
-		for (Authentication auth : authentications.values()) {
-			if (auth instanceof ApiKeyAuth) {
-				((ApiKeyAuth) auth).setApiKeyPrefix(apiKeyPrefix);
-				return;
-			}
-		}
-		throw new RuntimeException("No API key authentication configured!");
-	}
+	}	
 
 	/**
 	 * Helper method to set access token for the first OAuth2 authentication.
@@ -726,7 +666,7 @@ public class ApiClient {
 				return accept;
 			}
 		}
-		return StringUtil.join(accepts, ",");
+		return Arrays.stream(accepts).collect(Collectors.joining(","));
 	}
 
 	/**

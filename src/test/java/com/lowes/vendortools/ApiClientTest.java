@@ -17,16 +17,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 
 import com.lowes.vendortools.auth.Authentication;
 import com.lowes.vendortools.auth.OAuth;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ApiClientTest {
 	
 	private static final int PORTNUMBER = 9000;
@@ -67,10 +63,12 @@ public class ApiClientTest {
 			e.printStackTrace();
 		}
 		apiClient = new ApiClient();
+		Assertions.assertEquals(apiClient, apiClient.setVerifyingSsl(true));
 		Map<String, Authentication> authMap = apiClient.getAuthentications();
 		OAuth oauth = (OAuth) authMap.get("Oauth");
 		Assertions.assertEquals(this.oauthToken, oauth.getAccessToken());
 	}
+	
 	@AfterAll
 	public static void cleanup() {
 		clientAndServer.stop();
