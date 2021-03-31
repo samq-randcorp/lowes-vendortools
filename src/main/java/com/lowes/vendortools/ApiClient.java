@@ -78,7 +78,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowes.vendortools.auth.Authentication;
 import com.lowes.vendortools.auth.OAuth;
 import com.lowes.vendortools.exception.ApiException;
-import com.lowes.vendortools.exception.OauthClientException;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
