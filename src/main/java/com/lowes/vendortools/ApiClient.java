@@ -77,6 +77,8 @@ import org.threeten.bp.OffsetDateTime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowes.vendortools.auth.Authentication;
 import com.lowes.vendortools.auth.OAuth;
+import com.lowes.vendortools.exception.ApiException;
+import com.lowes.vendortools.exception.OauthClientException;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -90,19 +92,20 @@ import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor.Level;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class ApiClient {
 
 	private static final String PASSWORD_CREDENTIALS = "password_credentials";
 	public static final String PASSWORD = "password";
 	public static final String USERNAME = "username";
-	public static  String ACCESS_TOKEN = "access_token";
-	public static  String SCOPE = "scope";
-	public static  String GRANT_TYPE = "grant_type";
-	public static  String CLIENT_SECRET = "client_secret";
-	public static  String CLIENT_ID = "client_id";
-	public static  String TOKEN_URL = "tokenUrl";
-	public static  String OAUTH_PROPERTY_FILE = "Auth.properties";
+	public static String ACCESS_TOKEN = "access_token";
+	public static String SCOPE = "scope";
+	public static String GRANT_TYPE = "grant_type";
+	public static String CLIENT_SECRET = "client_secret";
+	public static String CLIENT_ID = "client_id";
+	public static String TOKEN_URL = "tokenUrl";
+	public static String OAUTH_PROPERTY_FILE = "Auth.properties";
 	private String basePath = "https://localhost:8080";
 	private boolean debugging = false;
 	private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
@@ -129,7 +132,7 @@ public class ApiClient {
 	 */
 	public ApiClient() {
 		httpClient = new OkHttpClient();
-		basePath=loadProperties().getProperty("base_path");
+		basePath = loadProperties().getProperty("base_path");
 		verifyingSsl = true;
 
 		json = new JSON();
@@ -166,15 +169,22 @@ public class ApiClient {
 		String grantType = properties.getProperty(GRANT_TYPE);
 		params.add(new BasicNameValuePair(GRANT_TYPE, grantType));
 		params.add(new BasicNameValuePair(SCOPE, properties.getProperty(SCOPE)));
-		if(grantType.equals(PASSWORD_CREDENTIALS)) {
-			 params.add(new BasicNameValuePair(USERNAME, properties.getProperty(USERNAME)));
-			 params.add(new BasicNameValuePair(PASSWORD, properties.getProperty(PASSWORD)));	
+		if (grantType.equals(PASSWORD_CREDENTIALS)) {
+			params.add(new BasicNameValuePair(USERNAME, properties.getProperty(USERNAME)));
+			params.add(new BasicNameValuePair(PASSWORD, properties.getProperty(PASSWORD)));
 		}
 		post.setEntity(new UrlEncodedFormEntity(params));
-		HttpResponse response = httpclient.execute(post);
-		String body = EntityUtils.toString(response.getEntity());
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map responseMap=objectMapper.readValue(body, Map.class);
+		Map responseMap = Collections.emptyMap();
+		try {
+			HttpResponse response = httpclient.execute(post);
+			String body = EntityUtils.toString(response.getEntity());
+			ObjectMapper objectMapper = new ObjectMapper();
+			responseMap = objectMapper.readValue(body, Map.class);
+		} catch (Exception e) {
+			log.error(e.getLocalizedMessage(), e);
+
+		}
+
 		return Objects.toString(responseMap.get(ACCESS_TOKEN));
 	}
 
@@ -358,7 +368,7 @@ public class ApiClient {
 	 */
 	public Authentication getAuthentication(String authName) {
 		return authentications.get(authName);
-	}	
+	}
 
 	/**
 	 * Helper method to set access token for the first OAuth2 authentication.
@@ -563,8 +573,6 @@ public class ApiClient {
 		return params;
 	}
 
-	
-
 	/**
 	 * Sanitize filename by removing path. e.g. ../../sun.gif becomes sun.gif
 	 *
@@ -660,15 +668,6 @@ public class ApiClient {
 			return null;
 		}
 
-		if ("byte[]".equals(returnType.toString())) {
-			// Handle binary response (byte array).
-			try {
-				return (T) response.body().bytes();
-			} catch (IOException e) {
-				throw new ApiException(e);
-			}
-		}
-
 		String respBody;
 		try {
 			if (response.body() != null)
@@ -727,8 +726,6 @@ public class ApiClient {
 			throw new ApiException("Content type \"" + contentType + "\" is not supported");
 		}
 	}
-
-
 
 	/**
 	 * {@link #execute(Call, Type)}
@@ -907,7 +904,7 @@ public class ApiClient {
 			reqBody = null;
 		} else if ("application/x-www-form-urlencoded".equals(contentType)) {
 			reqBody = buildRequestBodyFormEncoding(formParams);
-		}else if (body == null) {
+		} else if (body == null) {
 			if ("DELETE".equals(method)) {
 				// allow calling DELETE without sending a request body
 				reqBody = null;
@@ -1027,8 +1024,6 @@ public class ApiClient {
 		}
 		return formBuilder.build();
 	}
-
-
 
 	/**
 	 * Apply SSL related settings to httpClient according to the current values of

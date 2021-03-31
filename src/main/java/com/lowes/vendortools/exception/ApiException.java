@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-package com.lowes.vendortools;
+package com.lowes.vendortools.exception;
 
 import java.util.Map;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
     private String responseBody = null;
 
     public ApiException() {}
-
+ 
     public ApiException(Throwable throwable) {
         super(throwable);
     }

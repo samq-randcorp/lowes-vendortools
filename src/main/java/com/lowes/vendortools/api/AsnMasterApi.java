@@ -15,12 +15,12 @@ package com.lowes.vendortools.api;
 import com.google.gson.reflect.TypeToken;
 import com.lowes.vendortools.ApiCallback;
 import com.lowes.vendortools.ApiClient;
-import com.lowes.vendortools.ApiException;
 import com.lowes.vendortools.ApiResponse;
 import com.lowes.vendortools.Configuration;
 import com.lowes.vendortools.Pair;
 import com.lowes.vendortools.ProgressRequestBody;
 import com.lowes.vendortools.ProgressResponseBody;
+import com.lowes.vendortools.exception.ApiException;
 import com.lowes.vendortools.model.ASNInformation;
 import com.lowes.vendortools.model.ASNServiceResponseDTO;
 import com.lowes.vendortools.model.ValidatedASNView;
@@ -293,7 +293,7 @@ public class AsnMasterApi {
                 public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
                     callback.onUploadProgress(bytesWritten, contentLength, done);
                 }
-            };
+            }; 
         }
 
         com.squareup.okhttp.Call call = postAsnValidateBeforeCall(body, progressListener, progressRequestListener);
