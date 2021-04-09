@@ -12,11 +12,13 @@
 
 package com.lowes.vendortools;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
@@ -94,7 +96,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ApiClient {
-
+	private Properties properties = loadProperties();
+	private static final String X_LOWES_UUID = "x-lowes-uuid";
+	private static final String X_LOWES_ORIGINATING_SERVER_HOSTNAME = "x-lowes-originating-server-hostname";
+	private static final String X_IBM_CLIENT_ID = "x-ibm-client-id";
 	private static final String PASSWORD_CREDENTIALS = "password_credentials";
 	public static final String PASSWORD = "password";
 	public static final String USERNAME = "username";
@@ -131,6 +136,9 @@ public class ApiClient {
 	 */
 	public ApiClient() {
 		httpClient = new OkHttpClient();
+		defaultHeaderMap.put(X_IBM_CLIENT_ID, properties.getProperty(CLIENT_ID));
+		defaultHeaderMap.put(X_LOWES_ORIGINATING_SERVER_HOSTNAME, getHostName());
+		defaultHeaderMap.put(X_LOWES_UUID, getHostName());
 		basePath = loadProperties().getProperty("base_path");
 		verifyingSsl = true;
 
@@ -157,7 +165,7 @@ public class ApiClient {
 	private String generateOauthToken()
 			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, ParseException, IOException {
 		// GET Client ID , Secret , tokenurl from Root property file
-		Properties properties = loadProperties();
+		
 
 		HttpClient httpclient = createSSLSecureHttpClient();
 
@@ -1097,5 +1105,29 @@ public class ApiClient {
 		} catch (IOException e) {
 			throw new AssertionError(e);
 		}
+	}
+
+	private String getHostName() {
+		try {
+
+			// ADD HOSTNAME OF MACHINE
+			Process hostNameProcess = Runtime.getRuntime().exec("hostname");
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(hostNameProcess.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(hostNameProcess.getErrorStream()));
+
+			// Read the output from the command
+			System.out.println("Here is the standard output of the command:\n");
+			String s = null;
+			while ((s = stdInput.readLine()) != null) {
+				return s;
+			}
+
+		} catch (Exception exp) {
+			log.error(exp.getLocalizedMessage(), exp);
+		}
+
+		return "lowes";
 	}
 }

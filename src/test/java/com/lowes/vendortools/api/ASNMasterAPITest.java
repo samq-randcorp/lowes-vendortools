@@ -56,7 +56,7 @@ public class ASNMasterAPITest {
 				.withBody("{ \"token_type\": \"bearer\",\"access_token\": " +'"'+ oauthToken+'"' + "}")
 				.withDelay(TimeUnit.SECONDS, 0));
 		
-		clientAndServer.when(request("/asn").withMethod("POST"), exactly(10)).respond(response().withStatusCode(202)
+		clientAndServer.when(request("/shipment-notification").withMethod("POST"), exactly(10)).respond(response().withStatusCode(202)
 				.withHeaders(new Header("Content-Type", "application/json"),
 						new Header("Cache-Control", "public, max-age=86400"))
 				.withBody("{ \"response\": \"SUCCESS\",\"transaction-Id\": " + '"' + trnxId + '"' + "," + "\"time\":"
@@ -68,7 +68,7 @@ public class ASNMasterAPITest {
 		response.put("id", trnxId);
 		String parsedResponseForMockServer = new ObjectMapper().writeValueAsString(response);
 
-		clientAndServer.when(request("/asn/" + trnxId).withMethod("GET"), exactly(10))
+		clientAndServer.when(request("/shipment-notification/" + trnxId).withMethod("GET"), exactly(10))
 				.respond(response().withStatusCode(202)
 						.withHeaders(new Header("Content-Type", "application/json"),
 								new Header("Cache-Control", "public, max-age=86400"))

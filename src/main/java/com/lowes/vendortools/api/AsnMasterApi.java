@@ -33,7 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AsnMasterApi {
-    private static final String AUTH_TYPE = "Oauth";
+    private static final String ASN = "/shipment-notification";
+	private static final String AUTH_TYPE = "Oauth";
 	private ApiClient apiClient;
 
     public AsnMasterApi() {
@@ -64,7 +65,7 @@ public class AsnMasterApi {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/asn/{txnId}"
+        String localVarPath = ASN+"/{txnId}"
             .replaceAll("\\{" + "txnId" + "\\}", apiClient.escapeString(txnId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -190,7 +191,7 @@ public class AsnMasterApi {
         Object localVarPostBody = body;
         
         // create path and map variables
-        String localVarPath = "/asn";
+        String localVarPath = ASN;
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
