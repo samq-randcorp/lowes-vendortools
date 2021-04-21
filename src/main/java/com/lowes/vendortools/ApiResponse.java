@@ -24,15 +24,6 @@ public class ApiResponse<T> {
     final private int statusCode;
     final private Map<String, List<String>> headers;
     final private T data;
-
-    /**
-     * @param statusCode The status code of HTTP response
-     * @param headers The headers of HTTP response
-     */
-    public ApiResponse(int statusCode, Map<String, List<String>> headers) {
-        this(statusCode, headers, null);
-    }
-
     /**
      * @param statusCode The status code of HTTP response
      * @param headers The headers of HTTP response
