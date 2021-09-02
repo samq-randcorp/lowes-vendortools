@@ -4,7 +4,7 @@ name: Whitesource Prioritize Java with Gradle
 
 on:
   push:
-    branches: [ main ]
+    branches: [ android ]
 
 jobs:
   build:
@@ -13,35 +13,30 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK
+    - name: set up JDK 8
       uses: actions/setup-java@v2
       with:
         java-version: '8'
         distribution: 'adopt'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: |
+        chmod +x gradlew
+        echo "ANDROID_HOME:" $ANDROID_HOME
     - name: Build with Gradle
-      run: ./gradlew build -x test
+      run: ./gradlew build
+
     - name: WhiteSource Unified Agent Scan
       env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         WS_APIKEY: ${{secrets.APIKEY}}
         WS_USERKEY: ${{secrets.USERKEY}}
-        WS_WSS_URL: https://saas.whitesourcesoftware.com/agent
         WS_PRODUCTNAME: GH_${{github.event.repository.name}}
-        WS_PROJECTNAME: ${{github.ref}}_Prioritize
-        WS_ENABLEIMPACTANALYSIS: true
-        WS_REQUIREKNOWNSHA1: false
-        WS_RESOLVEALLDEPENDENCIES: false
-        WS_GRADLE_RESOLVEDEPENDENCIES: true
-        WS_GRADLE_AGGREGATEMODULES: true
-        WS_GRADLE_PREFERREDENVIRONMENT: wrapper
-        WS_GRADLE_WRAPPERPATH: ./gradlew
-        WS_FILESYSTEMSCAN: false
-        WS_GENERATEPROJECTDETAILSJSON: true
+        WS_PROJECTNAME: ${{github.ref}}_ghaction
       run: |
         curl -LJO https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar
         echo Unified Agent downloaded successfully
-        WARFILE=$(find ./build/libs -type f -wholename "*.war")
-        java -jar wss-unified-agent.jar -appPath $WARFILE -d ./
+        java -jar wss-unified-agent.jar
         
