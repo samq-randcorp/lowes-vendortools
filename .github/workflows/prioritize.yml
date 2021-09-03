@@ -38,5 +38,5 @@ jobs:
       run: |
         curl -LJO https://unified-agent.s3.amazonaws.com/wss-unified-agent.jar
         echo Unified Agent downloaded successfully
-        WARFILE=$(find ./ -type f -wholename "*/target/*.war")
+        WARFILE=$(find ./ -type f -wholename "*/target/*.jar")
         java -jar wss-unified-agent.jar -appPath $WARFILE -d ./
